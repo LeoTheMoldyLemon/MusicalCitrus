@@ -22,8 +22,9 @@ module.exports = {
 			if(page<1){
 				page=1
 			}
+			let colors={"$":16774662 ,"&":13656088 ,"%":8166696}
 			page=Math.min(page, Math.floor(player.queue.length/15)+1)
-			let embed={"title":"songqueue", "color":16774662,"description":"Page: "+page+" \n"}
+			let embed={"title":"songqueue", "color":colors[config.symbol],"description":"Page: "+page+" \n"}
 			for(let i=15*(page-1); i<Math.min(15*page, player.queue.length); i++){
 				if(i==player.current){
 					embed.description+="**"

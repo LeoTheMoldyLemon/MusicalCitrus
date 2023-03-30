@@ -12,28 +12,12 @@ module.exports = {
 	async execute(args, msg, client, player, config){
 		try{
 			if (!msg.member.voice?.channel) return msg.reply('You have to be connected to a voice channel in order to play a song.')
-			player.connection = joinVoiceChannel({
-					channelId: msg.member.voice.channel.id,
-					guildId: msg.guild.id,
-					adapterCreator: msg.guild.voiceAdapterCreator
-				})
-			player.connection.on('stateChange', (old_state, new_state) => {
-				if (old_state.status === VoiceConnectionStatus.Ready && new_state.status === VoiceConnectionStatus.Connecting) {
-					player.connection.configureNetworking();
-				}
-			})
-			/*player.connection.on("stateChange", (oldState, newState) => {
-				console.log(new Date().toUTCString()+"> [CONNECTION CHANGE] ",oldState, " --> ", newState);
-			})*/
-			player.connection.on("error", (e) => {
-				console.error(new Date().toUTCString()+"> [CONNECTION ERROR] ",e);
-			})
+			
+			player.connectToVoice(msg.member.voice.channel.id, msg.guild)
+		
 			
 			if(msg.content.replace(config.symbol, "").split(" ")[0]=="cp"){
-				player.queue=[]
-				player.playing=false
-				player.current=0
-				player.stop()
+				player.clearQueue(msg.guildId, msg.clientId)
 			}
 			if(args.startsWith('https') && play.yt_validate(args) === 'video') {
 				console.log(new Date().toUTCString()+"> "+`[${msg.guild.name}] ${msg.member.user.username}: Recognized as video link.`)
@@ -76,20 +60,17 @@ module.exports = {
 			}else{
 				await msg.reply("Something is wrong with that argument.")
 			}
+			
 			try{
 				if(!player.playing){
-					let stream=await play.stream(player.queue[player.current].url, {discordPlayerCompatibility :true})
-					let resource = createAudioResource(stream.stream, {inputType: stream.type})
-					await player.play(resource)
-					await player.connection.subscribe(player)
-					await msg.reply("Playing: "+player.queue[player.current].title)
-					player.playing=true
+					player.playCurrent(msg)
 				}
 			}catch(e){
+				player.playing=false
 				console.error(new Date().toUTCString()+"> ", e)
 				await msg.reply("Found the song, but failed to play.")
 			}
-			
+			await player.autosaveQueue(msg.guildId, msg.clientId)
 			
 		}catch(e){
 			console.error(new Date().toUTCString()+"> ", e)

@@ -24,7 +24,6 @@ module.exports = {
 				return;
 			}
 			saved[msg.guildId][args]=player.queue
-			console.log(saved)
 			await fs.writeFile("playlists.json", JSON.stringify(saved), async (e)=>{
 				if(e){
 					console.error(new Date().toUTCString()+"> ", e)

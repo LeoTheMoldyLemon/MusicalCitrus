@@ -33,6 +33,7 @@ module.exports = {
 				await msg.reply("Playing: "+player.queue[player.current].title+" from "+seek+" seconds.")
 				player.playing=true
 			}catch(e){
+				player.playing=false
 				console.error(new Date().toUTCString()+"> ", e)
 				await msg.reply("Found the song, but failed to play.")
 			}

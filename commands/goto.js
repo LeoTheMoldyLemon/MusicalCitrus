@@ -17,15 +17,11 @@ module.exports = {
 					await msg.reply(args+" isn't a valid number.")
 				}
 				player.current=Math.min(num, player.queue.length)-1
-				let stream=await play.stream(player.queue[player.current].url, {discordPlayerCompatibility :true})
-				let resource = createAudioResource(stream.stream, {inputType: stream.type})
-				await player.play(resource)
-				await player.connection.subscribe(player)
-				await msg.reply("Playing: "+player.queue[player.current].title)
-				player.playing=true
+				player.playCurrent(msg)
 			}catch(e){
+				player.playing=false
 				console.error(new Date().toUTCString()+"> ", e)
-				await msg.reply("Found the song, but failed to play.")
+				await msg.reply("Jumped to that song in the playlist, but failed to play.")
 			}
 			
 			

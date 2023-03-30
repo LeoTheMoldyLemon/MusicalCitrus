@@ -11,10 +11,7 @@ module.exports = {
 	data: {names:["clear", "c"]},
 	async execute(args, msg, client, player, config){
 		try{
-			player.queue=[]
-			player.playing=false
-			player.current=0
-			player.stop()
+			player.clearQueue(msg.guildId, msg.clientId)
 			await msg.reply("Cleared the queue.")
 		}catch(e){
 			console.error(new Date().toUTCString()+"> ", e)

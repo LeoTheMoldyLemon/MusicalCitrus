@@ -11,12 +11,10 @@ module.exports = {
 	data: {names:["fuckoff"]},
 	async execute(args, msg, client, player, config){
 		try{
-			player.queue=[]
-			player.playing=false
-			player.current=0
-			player.stop()
+			player.clearQueue(msg.guildId, msg.clientId)
 			try{
-				player.connection.destroy()
+				await player.connection.destroy()
+				player.connection=null
 				await msg.reply("Fine. geez.")
 			}catch{
 				await msg.reply("I am literally already out. chill.")

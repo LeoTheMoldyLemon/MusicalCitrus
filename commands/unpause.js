@@ -8,7 +8,7 @@ const { joinVoiceChannel, createAudioPlayer, createAudioResource, entersState, S
 const play=require("play-dl");
 
 module.exports = {
-	data: {names:["unpause", "resume"]},
+	data: {names:["unpause", "resume", "continue"]},
 	async execute(args, msg, client, player, config){
 		try{
 			if(player.unpause()){

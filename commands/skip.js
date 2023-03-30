@@ -16,14 +16,10 @@ module.exports = {
 			if(player.current>=player.queue.length){
 				player.current=0
 			}
-			let stream=await play.stream(player.queue[player.current].url, {discordPlayerCompatibility :true})
-			let resource = createAudioResource(stream.stream, {inputType: stream.type})
-			player.play(resource)
-			player.playing=true
-			await msg.reply("Skipped, playing: "+player.queue[player.current].title)
+			player.playCurrent(msg)
 		}catch(e){
 			console.error(new Date().toUTCString()+"> ", e)
-			await msg.reply("Something went wrong skipping.")
+			await msg.reply("Something went wrong with skipping.")
 		}
 	}
 }
